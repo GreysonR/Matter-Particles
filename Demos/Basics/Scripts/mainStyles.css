@@ -1,0 +1,26 @@
+body {
+	margin: 0;
+	background: #101010;
+	overflow: hidden;
+}
+canvas {
+	width: 100vw;
+	height: 100vh;
+	margin: 0;
+}
+
+#rsButton {
+	position: absolute;
+	top: 1vh;
+	left: 1vh;
+	background: #FFFFFF10;
+	font-family: "Lato", sans-serif;
+	color: white;
+	padding: 2vh;
+	font-size: 3vh;
+	user-select: none;
+	-webkit-user-select: none;
+}
+#rsButton:hover {
+	cursor: pointer;
+}
