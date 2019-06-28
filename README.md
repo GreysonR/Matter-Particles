@@ -1,5 +1,5 @@
 # Matter-Particles
-Matter-Particles makes creating particle effects easy and simple in matter.js. Learning how to use Matter-Particles is very easy since it was designed to be similar to matter.js.
+Matter-Particles makes creating particle effects simple and easy in matter.js. Learning how to use Matter-Particles is very easy since it was designed to be similar to matter.js.
 
 ## How to create a simple particle emitter
 Creating a particle emitter can be done in as little as 5 lines of code. <br>
