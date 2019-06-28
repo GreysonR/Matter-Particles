@@ -1,14 +1,14 @@
 # Matter-Particles
 Matter-Particles makes creating particle effects simple and easy in matter.js. Learning how to use Matter-Particles is very easy since it was designed to be similar to matter.js.
 
-## How to create a simple particle emitter
+## How to create a basic particle emitter
 Creating a particle emitter can be done in as little as 5 lines of code. <br>
-The first thing you need to do is create an engine if you haven't already in matter.js
+The first thing you need to do is create an engine. If you're new to matter.js or haven't used matter.js before, Matter-Particles will automatically create an engine for you:
 
     var Particles = new Particle;
     Particles.engine.create();
     
-After that, create a particle emitter
+After that, create a particle emitter:
 
     var Emitter = Particles.emitter;
     var emitter = Emitter.create(250, 250);
@@ -27,24 +27,23 @@ The last thing you need to do is add the emitter to the world. There are several
 Once you've done this, you should see the particles on your screen.<br>
 Here's the full code: <br>
 
-
 	var Particles = new Particle;
 	var Emitter = Particles.emitter;
 	Particles.engine.create();
 	var emitter = Emitter.create(vw*50, vh*50);
 	emitter.explode();
+
 <br> 
 
 # Options
-If you want to change the behavior or look of the emitter, there are several options to do so.
-Options are placed after positions when creating a new emitter. <br>
-For example,
+If you want to change the behavior or the look of the emitter, there are several options to do so.
+Options are placed after positions when creating a new emitter, like so: <br>
     
     var emitter = Emitters.create(250, 250, {
         amount: 20
     });
     
-All properties for emitters are listed below.
+All options for emitters are listed below.
 <br>
 
 ### `colors`
@@ -102,3 +101,4 @@ If not specified, the default value is `["#FE601C","#EBDB14","#EB471F","#ED7A0E"
 
 ### `collisionFilter`
  `collisionFilter` is the collisionFilter used by the particles. For more information on collisionFilters, see [Body.collisionFilter](http://brm.io/matter-js/docs/classes/Body.html#property_collisionFilter)
+
