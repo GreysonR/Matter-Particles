@@ -74,7 +74,7 @@ class Particle {
 			wireframes: false,
 			showBroadphase: false,
 		},
-		createEngine() {
+		create() {
 			// create an engine
 			window["engine"] = Engine.create(),
 			window["world"] = engine.world;
@@ -116,6 +116,21 @@ class Particle {
 			window["runner"] = Runner.create();
 			Runner.run(runner, engine);
 		},
+		createMouse() {
+			window["mouse"] = Mouse.create(render.canvas),
+			window["mouseConstraint"] = MouseConstraint.create(engine, {
+				mouse: mouse,
+				constraint: {
+					stiffness: 0.1,
+					render: {
+						visible: false
+					}
+				}
+			});
+		
+			World.add(world, mouseConstraint);
+			render.mouse = mouse;
+		}
 	};
 	emitter = {
 		random(min, max) {
@@ -240,7 +255,6 @@ class Particle {
 				requestAnimationFrame(function() {
 					requestAnimationFrame(function() {
 						e.options.amount = amount;
-						e.running = false;
 					});
 				});
 			}
@@ -254,103 +268,100 @@ class Particle {
 			return finalEmitter;
 		},
 		explode(emitter) {
-			if (emitter.running == false) {
-				emitter.running = true;
-				var random = new Particle
-				random = random.emitter.random;
-				particlesAdded = 0;
-				
-				function addParticle() {
-					let pos = emitter.pos;
-					let pSize = emitter.options.size;
-					let colors = emitter.options.colors;
-					let vel = emitter.options.velocity;
-					let number = emitter.options.amount;
-					let interval = emitter.options.interval;
-					let interactive = emitter.options.collisions;
-					let frictionAir = emitter.options.frictionAir;
-					let direction = emitter.options.velocity.direction;
-					let collisionFilter = emitter.options.collisionFilter;
+			var random = new Particle
+			random = random.emitter.random;
+			particlesAdded = 0;
+			
+			function addParticle() {
+				let pos = emitter.pos;
+				let pSize = emitter.options.size;
+				let colors = emitter.options.colors;
+				let vel = emitter.options.velocity;
+				let number = emitter.options.amount;
+				let interval = emitter.options.interval;
+				let interactive = emitter.options.collisions;
+				let frictionAir = emitter.options.frictionAir;
+				let direction = emitter.options.velocity.direction;
+				let collisionFilter = emitter.options.collisionFilter;
+			
+			
+				numParticles++;
+				particlesAdded++;
+			
+				if (emitter.options.parent != undefined) {
+					emitter.pos = emitter.options.parent.position;
+					pos = emitter.options.parent.position;
+				}
+			
+				let name = "particle"+numParticles;
+				let size = random(pSize.min, pSize.max);
+				let color = colors[Math.round(random(colors.length))];
+				color = (color != undefined) ? color : colors[0];
+			
+				window[name] = Bodies.circle(pos.x, pos.y, size, {
+					isSensor: interactive,
+					isParticle: true,
+					isStatic: emitter.options.isStatic,
+					mass: 0,
+					frictionAir: frictionAir,
+					render: {
+						fillStyle: color
+					},
+				});
+				World.add(world, window[name]);
 
-
-					numParticles++;
-					particlesAdded++;
-
-					if (emitter.options.parent != undefined) {
-						emitter.pos = emitter.options.parent.position;
-						pos = emitter.options.parent.position;
-					}
-
-					let name = "particle"+numParticles;
-					let size = random(pSize.min, pSize.max);
-					let color = colors[Math.round(random(colors.length))];
-					color = (color != undefined) ? color : colors[0];
-
-					window[name] = Bodies.circle(pos.x, pos.y, size, {
-						isSensor: interactive,
-						isParticle: true,
-						isStatic: emitter.options.isStatic,
-						mass: 0,
-						frictionAir: frictionAir,
-						render: {
-							fillStyle: color
-						},
-						collisionFilter: collisionFilter
-					});
-					World.add(world, window[name]);
-
-					let velX = random(0, vel.x);
-					let velY = random(0, vel.y);
-
-					if (vel.y == undefined) {
-						velY = random(0, 2);
-					}
-					if (vel.x == undefined) {
-						velX = random(0, 2);
-					}
-
-					if (direction.x == undefined || direction.x == 0) {
-						velX = (Boolean(Math.round(random()))) ? velX : velX*-1;
-					}
-					else {
-						velX *= direction.x;
-					}
-
-					if (direction.y == undefined || direction.y == 0) {
-						velY = (Boolean(Math.round(random()))) ? velY : velY*-1;
-					}
-					else {
-						velY *= direction.y;
-					}
-					let velocity = {x:velX,y:velY};
-					Body.setVelocity(window[name], velocity);
-					setTimeout(function() {
-						function decreaseScale() {
-							Body.scale(window[name], 0.9, 0.9);
-							if (window[name].circleRadius > 0.1) {
-								requestAnimationFrame(decreaseScale);
-							}
-							else {
-								Composite.remove(world, window[name]);
-							}
-						}
-						decreaseScale();
-					}, emitter.options.delay);
-				
-					if (particlesAdded < number) {
-						if (interval > 0) {
-							setTimeout(addParticle, interval);
+				if (collisionFilter != undefined) {
+					window[name].collisionFilter = collisionFilter;
+				}
+			
+				let velX = random(0, vel.x);
+				let velY = random(0, vel.y);
+			
+				if (vel.y == undefined) {
+					velY = random(0, 2);
+				}
+				if (vel.x == undefined) {
+					velX = random(0, 2);
+				}
+			
+				if (direction.x == undefined || direction.x == 0) {
+					velX = (Boolean(Math.round(random()))) ? velX : velX*-1;
+				}
+				else {
+					velX *= direction.x;
+				}
+			
+				if (direction.y == undefined || direction.y == 0) {
+					velY = (Boolean(Math.round(random()))) ? velY : velY*-1;
+				}
+				else {
+					velY *= direction.y;
+				}
+				let velocity = {x:velX,y:velY};
+				Body.setVelocity(window[name], velocity);
+				setTimeout(function() {
+					function decreaseScale() {
+						Body.scale(window[name], 0.9, 0.9);
+						if (window[name].circleRadius > 0.1) {
+							requestAnimationFrame(decreaseScale);
 						}
 						else {
-							addParticle();
+							Composite.remove(world, window[name]);
 						}
 					}
+					decreaseScale();
+				}, emitter.options.delay);
+			
+				if (particlesAdded < number) {
+					if (interval > 0) {
+						setTimeout(addParticle, interval);
+					}
 					else {
-						emitter.running = false;
+						addParticle();
 					}
 				}
-				addParticle();
 			}
+			addParticle();
 		},
 	}
 }
