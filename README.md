@@ -8,6 +8,7 @@ The first thing you need to do is create an engine. If you're new to matter.js o
     var Particles = new Particle;
     Particles.engine.create();
     
+If you want, you can also add mouse control with `Particles.engine.createMouse()`.
 After that, create a particle emitter:
 
     var Emitter = Particles.emitter;
