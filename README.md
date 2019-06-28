@@ -31,7 +31,7 @@ Here's the full code: <br>
 	var Particles = new Particle;
 	var Emitter = Particles.emitter;
 	Particles.engine.create();
-	var emitter = Emitter.create(vw*50, vh*50);
+	var emitter = Emitter.create(250, 250);
 	emitter.explode();
 
 <br> 
