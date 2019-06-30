@@ -2,7 +2,7 @@
 Matter-Particles makes creating particle effects extremely simple and easy in matter.js. Learning how to use Matter-Particles is easy since it was designed to look similar to matter.js.
 
 ## Creating a basic particle emitter
-Creating a particle emitter can be done in as little as 5 lines of code. <br>
+Creating a particle emitter can be done in as little as 4 lines of code. <br>
 The first thing you need to do is create an engine. If you're new to matter.js or haven't used matter.js before, Matter-Particles will automatically create an engine for you:
 
     Particle.engine.create();
