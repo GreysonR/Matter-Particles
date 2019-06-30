@@ -1,8 +1,7 @@
 //Usage
-var Particles = new Particle;
-var Emitter = Particles.emitter;
-Particles.engine.create();
-Particles.engine.createMouse();
+var Emitter = Particle.emitter;
+Particle.engine.create();
+Particle.engine.createMouse();
 
 mouseConstraint.collisionFilter = {group:1};
 engine.world.gravity.y = 2;

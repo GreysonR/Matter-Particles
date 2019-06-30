@@ -1,6 +1,5 @@
-var Particles = new Particle;
-var Emitter = Particles.emitter;
-Particles.engine.create();
+var Emitter = Particle.emitter;
+Particle.engine.create();
 var emitter = Emitter.create(window.innerWidth/2, window.innerHeight/2);
 
 var running = false;

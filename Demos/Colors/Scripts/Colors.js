@@ -1,6 +1,5 @@
-var Particles = new Particle;
-var Emitter = Particles.emitter;
-Particles.engine.create();
+var Emitter = Particle.emitter;
+Particle.engine.create();
 
 var red = Emitter.create(window.innerWidth*0.25, window.innerHeight/2, {
 	colors: "red",
@@ -32,7 +31,7 @@ function restartSim() {
 		}, 700);
 	}
 }
-window.addEventListener("load", explodeAll);
+window.addEventListener("load", restartSim);
 
 var button = document.getElementById("rsButton");
 button.addEventListener("click", function() {

@@ -39,8 +39,8 @@ var vh = window.innerHeight/100;
 
 var numParticles = 0;
 var particlesAdded = 0;
-class Particle {
-	defaults = {
+var Particle = {
+	defaults: {
 		colors: ["#FE601C","#EBDB14","#EB471F","#ED7A0E"],
 		collisions: false,
 		isStatic: false,
@@ -64,8 +64,8 @@ class Particle {
 		frictionAir: 0.02,
 		parent: undefined,
 		collisionFilter: undefined,
-	};
-	engine = {
+	},
+	engine: {
 		defaults: {
 			canvas: undefined,
 			width: window.innerWidth,
@@ -81,8 +81,7 @@ class Particle {
 			engine.timing.timeScale = 1;
 
 			// create a renderer
-			let defaults = new Particle;
-			defaults = defaults.engine.defaults;
+			let defaults = Particle.engine.defaults;
 			if (defaults.canvas == undefined) {
 				window["render"] = Render.create({
 					element: document.body,
@@ -131,8 +130,8 @@ class Particle {
 			World.add(world, mouseConstraint);
 			render.mouse = mouse;
 		}
-	};
-	emitter = {
+	},
+	emitter: {
 		random(min, max) {
 			if (min == undefined && max == undefined) {
 				min = 0;
@@ -146,8 +145,8 @@ class Particle {
 			return (Math.random() * (max-min)) + min;
 		},
 		create(x, y, options) {
-			let pr = new Particle;
-			let defaults = pr.defaults;
+			let defaults = Particle.defaults;
+			
 			//Reset options to defaults
 			if (options == undefined) {
 				options = defaults;
@@ -217,27 +216,31 @@ class Particle {
 
 			//Change velocity.direction
 			let dir = options.velocity.direction;
-			dir.y = dir.y.toLowerCase();
-			dir.x = dir.x.toLowerCase();
-			if (dir.y == "up") {
-				options.velocity.direction.y = -1;
+			if (typeof dir.y == "string") {
+				dir.y = dir.y.toLowerCase();
+				if (dir.y == "up") {
+					options.velocity.direction.y = -1;
+				}
+				else if (dir.y == "down") {
+					options.velocity.direction.y = 1;
+				}
+				else if (dir.y == "none") {
+					options.velocity.direction.y = 0;
+				}
 			}
-			else if (dir.y == "down") {
-				options.velocity.direction.y = 1;
-			}
-			else if (dir.y == "none") {
-				options.velocity.direction.y = 0;
+			if (typeof dir.x == "string") {
+				dir.x = dir.x.toLowerCase();
+				if (dir.x == "left") {
+					options.velocity.direction.x = -1;
+				}
+				else if (dir.x == "right") {
+					options.velocity.direction.x = 1;
+				}
+				else if (dir.x == "none") {
+					options.velocity.direction.x = 0;
+				}
 			}
 			
-			if (dir.x == "left") {
-				options.velocity.direction.x = -1;
-			}
-			else if (dir.x == "right") {
-				options.velocity.direction.x = 1;
-			}
-			else if (dir.x == "none") {
-				options.velocity.direction.x = 0;
-			}
 
 
 			//Create final emitter
@@ -259,8 +262,7 @@ class Particle {
 				});
 			}
 			finalEmitter.start = function() {
-				let localParticleEmitter = new Particle;
-				localParticleEmitter.emitter.explode(this);
+				Particle.emitter.explode(this);
 			}
 			finalEmitter.explode = finalEmitter.start;
 
@@ -268,8 +270,7 @@ class Particle {
 			return finalEmitter;
 		},
 		explode(emitter) {
-			var random = new Particle
-			random = random.emitter.random;
+			var random = Particle.emitter.random;
 			particlesAdded = 0;
 			
 			function addParticle() {
@@ -323,7 +324,7 @@ class Particle {
 				if (vel.x == undefined) {
 					velX = random(0, 2);
 				}
-			
+				
 				if (direction.x == undefined || direction.x == 0) {
 					velX = (Boolean(Math.round(random()))) ? velX : velX*-1;
 				}
@@ -364,4 +365,4 @@ class Particle {
 			addParticle();
 		},
 	}
-}
+};
