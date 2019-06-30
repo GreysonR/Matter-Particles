@@ -5,13 +5,12 @@ Matter-Particles makes creating particle effects extremely simple and easy in ma
 Creating a particle emitter can be done in as little as 5 lines of code. <br>
 The first thing you need to do is create an engine. If you're new to matter.js or haven't used matter.js before, Matter-Particles will automatically create an engine for you:
 
-    var Particles = new Particle;
-    Particles.engine.create();
+    Particle.engine.create();
     
-If you want, you can also add mouse control with `Particles.engine.createMouse().`<br>
+If you want, you can also add mouse control with `Particle.engine.createMouse().`<br>
 After that, create a particle emitter:
 
-    var Emitter = Particles.emitter;
+    var Emitter = Particle.emitter;
     var emitter = Emitter.create(250, 250);
     
 If you want, you can add more options to the emitter. However, you won't have to worry about that for this example.<br>
@@ -28,9 +27,8 @@ The last thing you need to do is add the emitter to the world. There are several
 Once you've done this, you should see the particles on your screen.<br>
 Here's the full code: <br>
 
-	var Particles = new Particle;
-	var Emitter = Particles.emitter;
-	Particles.engine.create();
+	var Emitter = Particle.emitter;
+	Particle.engine.create();
 	var emitter = Emitter.create(250, 250);
 	emitter.explode();
 
