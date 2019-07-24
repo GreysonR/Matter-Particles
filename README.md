@@ -91,7 +91,7 @@ If not specified, the default value is `["#FE601C","#EBDB14","#EB471F","#ED7A0E"
  The default value for `frictionAir` is `0.02`.
 
 ### `delay`
- `delay` is the delay (in milliseconds) before particles start to dissapear.
+ `delay` is the delay (in milliseconds) before particles start to disappear.
  The default value for `delay` is `400`.
 
 ### `parent`
