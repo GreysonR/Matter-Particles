@@ -3,25 +3,23 @@ Matter-Particles makes creating particle effects extremely simple and easy in ma
 
 ## Creating a basic particle emitter
 Creating a particle emitter can be done in as little as 4 lines of code. <br>
-The first thing you need to do is create an engine. If you're new to matter.js or haven't used matter.js before, Matter-Particles will automatically create an engine for you:
-
-    Particle.engine.create();
+The first thing you need to do is create an engine. If you're new to matter.js or haven't used matter.js before, Matter-Particles will automatically create an engine for you with `Particle.engine.create()`<br>
     
 If you want, you can also add mouse control with `Particle.engine.createMouse().`<br>
 After that, create a particle emitter:
 
     var Emitter = Particle.emitter;
-    var emitter = Emitter.create(250, 250);
+    var explosion = Emitter.create(250, 250);
     
 If you want, you can add more options to the emitter. However, you won't have to worry about that for this example.<br>
 The last thing you need to do is add the emitter to the world. There are several ways to do this:
 
     //Option 1
-    Emitter.explode(emitter);
+    explosion.explode(emitter);
     //Option 2
-    emitter.explode();
+    explosion.explode();
     //Option 3
-    emitter.start();
+    explosion.start();
     
 <br>
 Once you've done this, you should see the particles on your screen.<br>
@@ -29,8 +27,8 @@ Here's the full code: <br>
 
 	var Emitter = Particle.emitter;
 	Particle.engine.create();
-	var emitter = Emitter.create(250, 250);
-	emitter.explode();
+	var explosion = Emitter.create(250, 250);
+	explosion.explode();
 
 <br> 
 
@@ -38,7 +36,7 @@ Here's the full code: <br>
 If you want to change the behavior or the look of the emitter, there are several options to do so.
 Options are placed after positions when creating a new emitter, like so: <br>
     
-    var emitter = Emitters.create(250, 250, {
+    var explosion = Emitters.create(250, 250, {
         amount: 20
     });
     
@@ -99,5 +97,5 @@ If not specified, the default value is `["#FE601C","#EBDB14","#EB471F","#ED7A0E"
  If the object does not move, it is suggested to change the `x` and `y` of the emitter rather than specify `parent` to improve performance.
 
 ### `collisionFilter`
- `collisionFilter` is the collisionFilter used by the particles. For more information on collisionFilters, see [Body.collisionFilter](http://brm.io/matter-js/docs/classes/Body.html#property_collisionFilter)
+ `collisionFilter` is the collisionFilter used by the particles. For more information on collisionFilters, see [Body.collisionFilter](http://brm.io/matter-js/docs/classes/Body.html#property_collisionFilter) in the Matter.js docs.
 
