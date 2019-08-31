@@ -275,6 +275,8 @@ var Particle = {
 			
 			function addParticle() {
 				let pos = emitter.pos;
+				let posX = pos.x;
+				let posY = pos.y;
 				let pSize = emitter.options.size;
 				let colors = emitter.options.colors;
 				let vel = emitter.options.velocity;
@@ -312,7 +314,7 @@ var Particle = {
 				let color = colors[Math.round(random(colors.length))];
 				color = (color != undefined) ? color : colors[0];
 			
-				window[name] = Bodies.circle(pos.x, pos.y, size, {
+				window[name] = Bodies.circle(posX, posY, size, {
 					isSensor: interactive,
 					isParticle: true,
 					isStatic: emitter.options.isStatic,
