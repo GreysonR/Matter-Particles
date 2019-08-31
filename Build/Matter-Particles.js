@@ -290,8 +290,21 @@ var Particle = {
 				particlesAdded++;
 			
 				if (emitter.options.parent != undefined) {
-					emitter.pos = emitter.options.parent.position;
-					pos = emitter.options.parent.position;
+					let parent = emitter.options.parent;
+					pos = parent.position;
+					emitter.pos = pos;
+
+					if (parent.label == "Circle Body") {
+						let angle = Math.random() * Math.PI*2;
+						let dist = Math.random() * parent.circleRadius;
+
+						posX = (dist * Math.cos(angle)) + posX;
+						posY = (dist * Math.sin(angle)) + posY;
+					}
+					else if (parent.label == "Rectangle Body") {
+						posX = Math.random() * (parent.bounds.max.x - parent.bounds.min.x) + parent.bounds.min.x;
+						posY = Math.random() * (parent.bounds.max.y - parent.bounds.min.y) + parent.bounds.min.y;
+					}
 				}
 			
 				let name = "particle"+numParticles;
