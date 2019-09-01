@@ -52,6 +52,7 @@ var Particle = {
 		},
 		amount: 50,
 		interval: 0,
+		amountPerTick: 1,
 		velocity: {
 			x:5,
 			y:5,
@@ -202,6 +203,9 @@ var Particle = {
 			if (options.collisionFilter == undefined) {
 				options.collisionFilter = defaults.collisionFilter;
 			}
+			if (options.amountPerTick == undefined || options.amountPerTick < 1) {
+				options.amountPerTick = defaults.amountPerTick;
+			}
 
 
 			options.collisions = options.collisions ? false : true;
@@ -255,6 +259,7 @@ var Particle = {
 				let e = this;
 				let amount = this.options.amount;
 				this.options.amount = 0;
+				this.running = false;
 				requestAnimationFrame(function() {
 					requestAnimationFrame(function() {
 						e.options.amount = amount;
@@ -270,22 +275,25 @@ var Particle = {
 			return finalEmitter;
 		},
 		explode(emitter) {
+			emitter.running = true;
 			var random = Particle.emitter.random;
 			particlesAdded = 0;
 			
-			function addParticle() {
+			function addParticle(duplicate) {
 				let pos = emitter.pos;
 				let posX = pos.x;
 				let posY = pos.y;
-				let pSize = emitter.options.size;
-				let colors = emitter.options.colors;
-				let vel = emitter.options.velocity;
-				let number = emitter.options.amount;
-				let interval = emitter.options.interval;
-				let interactive = emitter.options.collisions;
-				let frictionAir = emitter.options.frictionAir;
-				let direction = emitter.options.velocity.direction;
-				let collisionFilter = emitter.options.collisionFilter;
+				let options = emitter.options;
+				let pSize = options.size;
+				let colors = options.colors;
+				let vel = options.velocity;
+				let number = options.amount;
+				let interval = options.interval;
+				let interactive = options.collisions;
+				let frictionAir = options.frictionAir;
+				let direction = options.velocity.direction;
+				let collisionFilter = options.collisionFilter;
+				let amountPerTick = options.amountPerTick;
 			
 			
 				numParticles++;
@@ -357,7 +365,8 @@ var Particle = {
 				Body.setVelocity(window[name], velocity);
 				setTimeout(function() {
 					function decreaseScale() {
-						Body.scale(window[name], 0.9, 0.9);
+						var scale = 1 - 0.1*engine.timing.timeScale;
+						Body.scale(window[name], scale, scale);
 						if (window[name].circleRadius > 0.1) {
 							requestAnimationFrame(decreaseScale);
 						}
@@ -366,11 +375,56 @@ var Particle = {
 						}
 					}
 					decreaseScale();
-				}, emitter.options.delay);
+				}, emitter.options.delay/engine.timing.timeScale);
 			
-				if (particlesAdded < number) {
+				if (particlesAdded < number && duplicate == undefined) {
 					if (interval > 0) {
-						setTimeout(addParticle, interval);
+						let framesPast = 0;
+
+						function waitForInterval() {
+							if (emitter.options.amount > 0) {
+								framesPast += engine.timing.timeScale;
+								if (runner != undefined && runner.fps != undefined) {
+									if (framesPast >= interval/(1000/runner.fps)) {
+										if (amountPerTick > 1) {
+											for (let i = amountPerTick; i--;) {
+												if (i != 0) {
+													addParticle(true);
+												}
+												else {
+													addParticle();
+												}
+											}
+										}
+										else {
+											addParticle();
+										}
+									}
+									else {
+										requestAnimationFrame(waitForInterval);
+									}
+								}
+								else {
+									if (framesPast >= interval/16.67/engine.timing.timeScale) {
+										for (let i = amountPerTick; i--;) {
+											if (i != 0) {
+												addParticle(true);
+											}
+											else {
+												addParticle();
+											}
+										}
+									}
+									else {
+										requestAnimationFrame(waitForInterval);
+									}
+								}
+							}
+							else {
+								emitter.running = false;
+							}
+						}
+						requestAnimationFrame(waitForInterval);
 					}
 					else {
 						addParticle();
