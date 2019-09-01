@@ -55,6 +55,10 @@ If not specified, the default value is `["#FE601C","#EBDB14","#EB471F","#ED7A0E"
 ### `interval`
  `interval` specifies the time (in milliseconds) between each particle's creation. If `interval` is 0, all of the particles will be created at the same time. <br>
  If not specified, the default value is `0`
+ 
+### `amountPerTick`
+ `amountPerTick` specifies how many particles are added on each interval. For instance, if `amountPerTick` is set to 2 and `interval` is set to 50, 2 particles will be added every 50 milliseconds.<br>
+ Must be above 0. It is not recommended to set `amountPerTick` very high, depending on how low `interval` is. Will not take effect if `interval` is `0`
 
 ### `collisions`
  `collisions` specifies whether the particles can collide with other bodies.<br>
