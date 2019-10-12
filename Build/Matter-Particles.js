@@ -62,6 +62,7 @@ var Particle = {
 			},
 		},
 		delay: 400,
+		decaySpeed: 0.1,
 		frictionAir: 0.02,
 		parent: undefined,
 		collisionFilter: undefined,
@@ -206,6 +207,15 @@ var Particle = {
 			if (options.amountPerTick == undefined || options.amountPerTick < 1) {
 				options.amountPerTick = defaults.amountPerTick;
 			}
+			if (options.decaySpeed == undefined) {
+				options.decaySpeed = defaults.decaySpeed;
+			}
+			if (options.decaySpeed < 0) {
+				options.decaySpeed = 0;
+			}
+			if (options.decaySpeed > 1) {
+				options.decaySpeed = 1;
+			}
 
 
 			options.collisions = options.collisions ? false : true;
@@ -284,6 +294,7 @@ var Particle = {
 				let posX = pos.x;
 				let posY = pos.y;
 				let options = emitter.options;
+				let delay = options.delay/engine.timing.timeScale;
 				let pSize = options.size;
 				let colors = options.colors;
 				let vel = options.velocity;
@@ -321,6 +332,13 @@ var Particle = {
 				let size = random(pSize.min, pSize.max);
 				let color = colors[Math.round(random(colors.length))];
 				color = (color != undefined) ? color : colors[0];
+
+				if (color == "random") {
+					let r = random(0, 255);
+					let g = random(0, 255);
+					let b = random(0, 255);
+					color = "rgb("+r+", "+g+", "+b+")";
+				}
 			
 				window[name] = Bodies.circle(posX, posY, size, {
 					isSensor: interactive,
@@ -328,14 +346,16 @@ var Particle = {
 					isStatic: emitter.options.isStatic,
 					mass: 0,
 					frictionAir: frictionAir,
+					decaySpeed: options.decaySpeed,
 					render: {
 						fillStyle: color
 					},
 				});
-				World.add(world, window[name]);
+				let particle = window[name];
+				World.add(world, particle);
 
 				if (collisionFilter != undefined) {
-					window[name].collisionFilter = collisionFilter;
+					particle.collisionFilter = collisionFilter;
 				}
 			
 				let velX = random(0, vel.x);
@@ -361,23 +381,22 @@ var Particle = {
 				else {
 					velY *= direction.y;
 				}
-				let velocity = {x:velX,y:velY};
-				Body.setVelocity(window[name], velocity);
-				setTimeout(function() {
-					function decreaseScale() {
-						var scale = 1 - 0.1*engine.timing.timeScale;
-						Body.scale(window[name], scale, scale);
-						if (window[name].circleRadius > 0.1) {
-							requestAnimationFrame(decreaseScale);
-						}
-						else {
-							Composite.remove(world, window[name]);
-						}
+				Body.setVelocity(particle, {x:velX,y:velY});
+
+				let scale = 1;
+				function decreaseScale() {
+					scale -= options.decaySpeed*engine.timing.timeScale;
+					particle.circleRadius = size * scale;
+					if (particle.circleRadius > options.decaySpeed) {
+						requestAnimationFrame(decreaseScale);
 					}
-					decreaseScale();
-				}, emitter.options.delay/engine.timing.timeScale);
+					else {
+						Composite.remove(world, particle);
+					}
+				}
+				setTimeout(decreaseScale, delay);
 			
-				if (particlesAdded < number && duplicate == undefined) {
+				if (particlesAdded < number && !duplicate) {
 					if (interval > 0) {
 						let framesPast = 0;
 
