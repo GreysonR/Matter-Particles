@@ -15,7 +15,7 @@ If you want, you can add more options to the emitter. However, you won't have to
 The last thing you need to do is add the emitter to the world. There are several ways to do this:
 
     //Option 1
-    explosion.explode(emitter);
+    Emitter.explode(explosion);
     //Option 2
     explosion.explode();
     //Option 3
