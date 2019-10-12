@@ -44,7 +44,8 @@ All options for emitters are listed below.
 <br>
 
 ### `colors`
-The `colors` option changes the color of the particles in that emitter. It can be either an array of all the possible colors _or_ a single color. The color of each particle is picked randomly from the set of colors provided.<br>
+The `colors` option changes the color of the particles in that emitter. It can be either an array of all the possible colors, a single color, or `"random"`. The color of each particle is picked randomly from the set of colors provided.<br>
+If `colors` is `"random"`, a randomly generated color is generated for each particle.<br>
 If not specified, the default value is `["#FE601C","#EBDB14","#EB471F","#ED7A0E"]`
 
 ### `amount`
@@ -95,6 +96,10 @@ If not specified, the default value is `["#FE601C","#EBDB14","#EB471F","#ED7A0E"
 ### `delay`
  `delay` is the delay (in milliseconds) before particles start to disappear.
  The default value for `delay` is `400`.
+ 
+### `decaySpeed`
+ `decaySpeed` specifies how quickly the particles' scale decreases (as a percent) after the `delay`. It can be a number between `0` and `1`. <br>
+  The default value for `decaySpeed` is `0.1`.
 
 ### `parent`
  `parent` is the object that the particle emitter will follow. When the object moves, the x and y of the emitter is updated to match the x and y of the parent. <br>
